@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% block description %}Статьи о CTF{% endblock %}
+{% block keywords %}CTF,статьи,полезное{% endblock %}
+{% block title %}Статьи | {{ super() }}{% endblock %}
+{% block main %}
+  {% for article in articles %}
+    <article>
+      <h1>{{ article.title }}</h1>
+      <section>
+        {{ article.text | truncate(250) | md | safe }}
+      </section>
+      <p><a href="{{ url_for("article", article_id=article.id) }}">Читать далее</a></p>
+    </article>
+  {% endfor %}
+{% endblock %}

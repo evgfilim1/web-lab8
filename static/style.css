@@ -1,0 +1,39 @@
+nav {
+    background: var(--background);
+    text-align: center;
+    padding: 6px;
+    font-size: 1.15em;
+}
+
+.nav-el {
+    display: inline-block;
+    padding: 0.5rem 0;
+}
+
+.nav-el + .nav-el::before {
+    content: '· ';
+    padding: 0.5rem;
+    cursor: default;
+}
+
+section.about img.avatar {
+    border-radius: 50%;
+    width: 250px;
+    display: block;
+    margin: 1rem auto;
+}
+
+section.about figcaption {
+    text-align: center;
+}
+
+section.about {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+}
+
+@media (max-width: 576px) {
+    section.about {
+        grid-template-columns: 1fr;
+    }
+}

@@ -1,0 +1,13 @@
+{% extends 'base.html' %}
+{% block title %}О нас | {{ super() }}{% endblock %}
+{% block main %}
+  <h1>О нас</h1>
+  <section class="about">
+    {% for name, src in (("Евгений Филимонов", "evgfilim1.jpg"), ("Денис Габербуш", "tvoikoteika.jpg")) %}
+      <figure>
+        <img alt="{{ name }}" src="{{ url_for("static", filename=src) }}" class="avatar">
+        <figcaption>{{ name }}, 20&nbsp;лет. ИБАС, 3&nbsp;курс.</figcaption>
+      </figure>
+    {% endfor %}
+  </section>
+{% endblock %}

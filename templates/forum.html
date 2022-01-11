@@ -1,0 +1,14 @@
+{% extends 'base.html' %}
+{% block description %}Форум о CTF{% endblock %}
+{% block keywords %}CTF,форум,полезное{% endblock %}
+{% block title %}Форум | {{ super() }}{% endblock %}
+{% block main %}
+  {% for thread in threads %}
+    <article>
+      <h1>{{ thread.title }}</h1>
+      <section>
+        {{ thread.text | truncate(250) | md | safe }}
+      </section>
+    </article>
+  {% endfor %}
+{% endblock %}

@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% block description %}{{ article.title }}{% endblock %}
+{% block keywords %}CTF,статьи,полезное{% if article.tags %},{{ article.tags | join(",") }}{% endif %}{% endblock %}
+{% block title %}{{ article.title }} | {{ super() }}{% endblock %}
+{% block main %}
+  <article>
+    <h1>{{ article.title }}</h1>
+    {{ article.text | md | safe }}
+  </article>
+{% endblock %}

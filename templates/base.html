@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="description" content="{% block description %}{% endblock %}">
+  <meta name="keywords" content="{% block keywords %}{% endblock %}">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>{% block title %}CTF{% endblock %}</title>
+
+  <link rel="stylesheet" href="{{ url_for("static", filename="water.min.css") }}">
+  <link rel="stylesheet" href="{{ url_for("static", filename="style.css") }}">
+
+  {% block head %}
+  {% endblock %}
+</head>
+<body>
+<header>
+  <nav>
+    <div class="nav-el"><a href="{{ url_for("index") }}">Домашняя</a></div>
+    <div class="nav-el"><a href="{{ url_for("articles") }}">Статьи</a></div>
+    {# <div class="nav-el"><a href="{{ url_for("forum") }}">Форум</a></div> #}
+    <div class="nav-el"><a href="{{ url_for("about") }}">О нас</a></div>
+  </nav>
+</header>
+<main>
+  {% block main %}
+  {% endblock %}
+</main>
+<footer>
+  <p>Посетителей на сайте сейчас: {{ g.db.get_visitors() }}</p>
+  <p>Copyright &copy; 2021 ИБАС ОС-ники.</p>
+</footer>
+</body>
+</html>
