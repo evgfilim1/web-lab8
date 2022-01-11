@@ -7,9 +7,11 @@
     <article>
       <h1>{{ article.title }}</h1>
       <section>
-        {{ article.text | truncate(250) | md | safe }}
+        {{ article.text | md2plain | truncate(250) }}
       </section>
       <p><a href="{{ url_for("article", article_id=article.id) }}">Читать далее</a></p>
     </article>
+  {% else %}
+    <h1>Отсутствуют статьи в БД</h1>
   {% endfor %}
 {% endblock %}

@@ -5,6 +5,13 @@
 {% block main %}
   <article>
     <h1>{{ article.title }}</h1>
+    <section>
+      <small>
+        {% for tag in article.tags %}
+          <code>#{{ tag }}</code>
+        {% endfor %}
+      </small>
+    </section>
     {{ article.text | md | safe }}
   </article>
 {% endblock %}

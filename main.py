@@ -1,29 +1,40 @@
-from markdown import markdown
+from io import StringIO
+
 from flask import Flask, render_template, g, request
+from markdown import markdown, Markdown
+from werkzeug.exceptions import NotFound
 
 import db
 
 app = Flask(__name__)
 
-fake_articles = [
-    {
-        "id": 1,
-        "title": "Test",
-        "text": "Lorem ipsum blah blah",
-        "tags": ["test"],
-    },
-    {
-        "id": 2,
-        "title": "Longer test",
-        "text": ("**Lorem** _ipsum_ dolor `sit` ~~amet~~ " * 1024),
-        "tags": ["test", "long"],
-    },
-]
+
+@app.template_filter()
+def md(string: str) -> str:
+    return markdown(string)
+
+
+# https://stackoverflow.com/a/54923798/12519972
+def unmark_element(element, stream=None):
+    if stream is None:
+        stream = StringIO()
+    if element.text:
+        stream.write(element.text)
+    for sub in element:
+        unmark_element(sub, stream)
+    if element.tail:
+        stream.write(element.tail)
+    return stream.getvalue()
+
+
+Markdown.output_formats["plain"] = unmark_element
 
 
 @app.template_filter()
-def md(string: str):
-    return markdown(string)
+def md2plain(string: str) -> str:
+    _md = Markdown(output_format="plain")  # noqa
+    _md.stripTopLevelTags = False
+    return _md.convert(string)
 
 
 @app.before_request
@@ -44,12 +55,16 @@ def index():
 
 @app.route("/articles/")
 def articles():
-    return render_template("articles.html", articles=fake_articles)
+    data = g.db.get_articles()
+    return render_template("articles.html", articles=data)
 
 
 @app.route("/articles/<int:article_id>")
 def article(article_id: int):
-    return render_template("article.html", article=fake_articles[article_id - 1])
+    data = g.db.get_article(article_id)
+    if data is None:
+        raise NotFound("Статья не найдена")
+    return render_template("article.html", article=data)
 
 
 @app.route("/forum/")
