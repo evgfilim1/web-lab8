@@ -1,6 +1,6 @@
 from io import StringIO
 
-from flask import Flask, render_template, g, request
+from flask import Flask, render_template, g, request, Response
 from markdown import markdown, Markdown
 from werkzeug.exceptions import NotFound
 
@@ -48,6 +48,11 @@ def commit_db(_):
     del g.db
 
 
+@app.errorhandler(404)
+def not_found(_):
+    return render_template("404.html"), 404
+
+
 @app.route("/")
 def index():
     return render_template("index.html")
@@ -75,3 +80,49 @@ def forum():
 @app.route("/about")
 def about():
     return render_template("about.html")
+
+
+@app.route("/robots.txt")
+def robots():
+    return Response("""User-agent: *
+Allow: /
+
+Sitemap: https://web-lab.evgfilim1.me/sitemap.xml
+""", mimetype='text/plain', )
+
+
+@app.route("/sitemap.xml")
+def sitemap():
+    return Response("""<?xml version="1.0" encoding="UTF-8"?>
+<urlset
+      xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+      xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+      xsi:schemaLocation="http://www.sitemaps.org/schemas/sitemap/0.9
+            http://www.sitemaps.org/schemas/sitemap/0.9/sitemap.xsd">
+<url>
+  <loc>https://web-lab.evgfilim1.me/</loc>
+  <lastmod>2022-01-11T19:41:32+00:00</lastmod>
+  <priority>1.00</priority>
+</url>
+<url>
+  <loc>https://web-lab.evgfilim1.me/articles/</loc>
+  <lastmod>2022-01-11T19:41:32+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://web-lab.evgfilim1.me/about</loc>
+  <lastmod>2022-01-11T19:41:32+00:00</lastmod>
+  <priority>0.80</priority>
+</url>
+<url>
+  <loc>https://web-lab.evgfilim1.me/articles/1</loc>
+  <lastmod>2022-01-11T19:41:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+<url>
+  <loc>https://web-lab.evgfilim1.me/articles/2</loc>
+  <lastmod>2022-01-11T19:41:32+00:00</lastmod>
+  <priority>0.64</priority>
+</url>
+</urlset>
+""", mimetype='text/xml')
